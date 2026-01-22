@@ -1,0 +1,5 @@
+# User config (contains server credentials)
+config.json
+
+# Build artifacts
+build.tar.gz

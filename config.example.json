@@ -1,0 +1,8 @@
+{
+  "piUser": "your_remote_username",
+  "piIpAddress": "your_remote_ip",
+  "tempDirOnPi": "/path/to/remote/temp_dir",
+  "finalDirOnPi": "/path/to/remote/web_root",
+  "buildCommand": "npm run build",
+  "buildDir": "build"
+}
