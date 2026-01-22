@@ -1,12 +1,35 @@
 # Self-Hosted Deploy Scripts
 
-Cross-platform deployment scripts for pushing web applications to your own server (VPS, Raspberry Pi, etc.) with a single command.
+Cross-platform deployment scripts for pushing web applications to your own server (VPS, Raspberry Pi, home server) with a single command.
+
+## Why Self-Host?
+
+Skip the monthly hosting fees. Run your sites on hardware you own - a $50 Raspberry Pi can serve multiple websites. Combined with **Cloudflare Zero Trust Tunnels**, you get enterprise-grade security without opening ports on your router or exposing your home IP address.
+
+### How Cloudflare Tunnels Work
+
+Instead of traditional port forwarding (which exposes your network), Cloudflare Tunnels create an outbound-only connection from your server to Cloudflare's edge network:
+
+```
+[Your Domain] → [Cloudflare Edge] ← secure tunnel ← [Your Pi/Server]
+                                                          ↑
+                                              (no open ports needed)
+```
+
+- **No port forwarding** - Your router stays locked down
+- **DDoS protection** - Cloudflare absorbs attacks before they reach you
+- **Free SSL** - Automatic HTTPS certificates
+- **Hidden origin IP** - Your home IP stays private
+
+The [full setup guide](./INSTRUCTIONS.md) walks through configuring this step-by-step.
+
+---
 
 ## Quick Start
 
 ```bash
 # 1. Copy this folder into your project root
-cp -r deploy/ /path/to/your-project/
+cp -r self-hosted-deploy-scripts/ /path/to/your-project/deploy/
 
 # 2. Create your config file
 cd your-project/deploy
@@ -20,15 +43,26 @@ cp config.example.json config.json
 
 ## What It Does
 
-1. **Builds** your project (`npm run build`)
+1. **Builds** your project (`npm run build` or custom command)
 2. **Compresses** the build directory into a single archive
 3. **Transfers** the archive to your server via SCP
 4. **Deploys** by extracting to your web root with correct permissions
 
+## Full Setup Guide
+
+**[INSTRUCTIONS.md](./INSTRUCTIONS.md)** covers everything:
+- Server preparation (Nginx install, directory setup)
+- SSH key configuration for passwordless deploys
+- Domain setup with Cloudflare DNS
+- Cloudflare Zero Trust Tunnel configuration
+- Running the tunnel as a system service
+
+---
+
 ## Requirements
 
 **Local Machine:**
-- Node.js and npm
+- Node.js and npm (or yarn)
 - SSH client (built into macOS/Linux, enable OpenSSH on Windows)
 - tar (built into macOS/Linux/Windows 10+)
 
@@ -37,7 +71,7 @@ cp config.example.json config.json
 - Web server (Nginx recommended)
 - tar
 
-## Project Types
+## Supported Project Types
 
 Works with any project that builds to static files:
 - **SPAs**: React, Vue, Angular, Svelte
@@ -46,7 +80,7 @@ Works with any project that builds to static files:
 
 ## Configuration
 
-Create `deploy/config.json` from the example:
+Create `config.json` from the example:
 
 ```json
 {
@@ -72,27 +106,6 @@ Create `deploy/config.json` from the example:
 ```
 deploy/config.json
 ```
-
-## File Structure
-
-```
-your-project/
-├── deploy/
-│   ├── deploy.sh            # Bash script (Linux/macOS)
-│   ├── deploy-powershell.ps1 # PowerShell script (Windows)
-│   ├── config.json          # Your server config (git-ignored)
-│   ├── config.example.json  # Template config
-│   ├── README.md
-│   ├── INSTRUCTIONS.md      # Full setup guide
-│   └── LICENSE
-├── src/
-├── package.json
-└── ...
-```
-
-## Full Setup Guide
-
-For complete server setup instructions including Nginx configuration and Cloudflare DNS/Tunnel setup, see **[INSTRUCTIONS.md](./INSTRUCTIONS.md)**.
 
 ## License
 
